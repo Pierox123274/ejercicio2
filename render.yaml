@@ -1,0 +1,33 @@
+services:
+  - type: web
+    name: ejercicio2-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: FIREBASE_PROJECT_ID
+        value: ing-web-93d49
+      - key: PERSONAS_COLLECTION
+        value: personas
+      - key: FIREBASE_CREDENTIALS_JSON
+        sync: false
+      - key: PYTHON_VERSION
+        value: "3.13.0"
+
+  - type: web
+    name: ejercicio2-web
+    runtime: node
+    plan: free
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    startCommand: npm run serve:ssr:frontend
+    envVars:
+      - key: API_BASE_URL
+        fromService:
+          type: web
+          name: ejercicio2-api
+          property: host
+        value: https://ejercicio2-api.onrender.com
