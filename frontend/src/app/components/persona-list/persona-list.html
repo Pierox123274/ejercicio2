@@ -1,0 +1,113 @@
+<div class="container py-4">
+  <h1 class="mb-4">Personas</h1>
+
+  @if (loading()) {
+    <div class="alert alert-info">Cargando personas...</div>
+  }
+
+  @if (error()) {
+    <div class="alert alert-danger d-flex justify-content-between align-items-center">
+      <span>{{ error() }}</span>
+      <button type="button" class="btn btn-sm btn-outline-danger" (click)="loadPersonas()">
+        Reintentar
+      </button>
+    </div>
+  }
+
+  <div class="card mb-4">
+    <div class="card-header">{{ isEditing ? 'Editar persona' : 'Nueva persona' }}</div>
+    <div class="card-body">
+      <form [formGroup]="form" (ngSubmit)="submit()" class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label" for="docIdentidad">Documento</label>
+          <input id="docIdentidad" class="form-control" formControlName="docIdentidad" />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label" for="nombre">Nombre</label>
+          <input id="nombre" class="form-control" formControlName="nombre" />
+        </div>
+        <div class="col-md-2">
+          <label class="form-label" for="edad">Edad</label>
+          <input id="edad" type="number" class="form-control" formControlName="edad" />
+        </div>
+        <div class="col-md-4">
+          <label class="form-label" for="correo">Correo</label>
+          <input id="correo" type="email" class="form-control" formControlName="correo" />
+        </div>
+        <div class="col-12 d-flex gap-2">
+          <button type="submit" class="btn btn-primary" [disabled]="saving()">
+            {{
+              saving()
+                ? 'Guardando...'
+                : isEditing
+                  ? 'Guardar cambios'
+                  : 'Agregar'
+            }}
+          </button>
+          @if (isEditing) {
+            <button
+              type="button"
+              class="btn btn-secondary"
+              [disabled]="saving()"
+              (click)="cancelEdit()"
+            >
+              Cancelar
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+
+  @if (!loading() && !error() && personas().length === 0) {
+    <div class="alert alert-warning">No hay personas registradas.</div>
+  }
+
+  @if (personas().length > 0) {
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th>Documento</th>
+            <th>Nombre</th>
+            <th>Edad</th>
+            <th>Correo</th>
+            <th class="text-end">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (persona of personas(); track persona.docIdentidad) {
+            <tr>
+              <td>{{ persona.docIdentidad }}</td>
+              <td>{{ persona.nombre }}</td>
+              <td>{{ persona.edad }}</td>
+              <td>{{ persona.correo }}</td>
+              <td class="text-end">
+                <div class="btn-group btn-group-sm">
+                  <button
+                    type="button"
+                    class="btn btn-outline-primary"
+                    [disabled]="deletingDoc() === persona.docIdentidad"
+                    (click)="startEdit(persona)"
+                  >
+                    Editar
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-outline-danger"
+                    [disabled]="deletingDoc() === persona.docIdentidad"
+                    (click)="deletePersona(persona)"
+                  >
+                    {{
+                      deletingDoc() === persona.docIdentidad ? 'Eliminando...' : 'Eliminar'
+                    }}
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>
