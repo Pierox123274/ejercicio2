@@ -2,59 +2,55 @@
 
 CRUD de personas con Angular, FastAPI y Firebase Firestore (`ing-web-93d49`).
 
-## Ejecutar (100% local)
+## Producción (internet)
+
+| Servicio | URL |
+|----------|-----|
+| **App** | https://ing-web-93d49.web.app |
+| **API** | https://ing-web-93d49.web.app/api |
+| **Código** | https://github.com/Pierox123274/ejercicio2 |
+
+### Desplegar backend en la nube
+
+El frontend ya está publicado. Para activar el backend en la nube:
+
+1. **Activa plan Blaze** en Firebase (gratis para uso bajo):  
+   https://console.firebase.google.com/project/ing-web-93d49/usage/details
+
+2. Ejecuta:
+   ```powershell
+   .\deploy-production.ps1
+   ```
+
+Guía detallada: `DESPLIEGUE-BACKEND.md`
+
+## Desarrollo local
 
 ### Primera vez
-
 ```powershell
-cd d:\WEB\ejercicio2
 .\install.ps1
 ```
 
-### Cada vez que quieras usar la app
-
+### Ejecutar
 ```powershell
 .\start.ps1
 ```
-
-O haz doble clic en **`ejecutar.bat`**.
-
-Se abre automáticamente: **http://localhost:4201**
+O doble clic en `ejecutar.bat`.
 
 | Servicio | URL |
 |----------|-----|
 | Frontend | http://localhost:4201 |
-| API | http://localhost:8001 |
+| Backend | http://localhost:8001 |
 | API Docs | http://localhost:8001/docs |
 
 ### Detener
-
 ```powershell
 .\stop.ps1
 ```
 
 ## Funciones
 
-- Listar personas
-- Crear persona
-- Editar persona
-- Eliminar persona
-- Datos guardados en Firebase Firestore (colección `personas`)
-
-## Requisitos
-
-- Node.js 20+
-- Python 3.11+
-- Firebase CLI (`npm install -g firebase-tools`)
-- Sesión Firebase: `firebase login`
-
-## Despliegue en internet (opcional)
-
-- **Frontend Firebase:** https://ing-web-93d49.web.app
-- **Backend Render:** ver `docs/deploy.md` (requiere tarjeta en Render)
-
-Guía paso a paso con Web Service manual: `docs/deploy.md`
-
-## Repositorio
-
-https://github.com/Pierox123274/ejercicio2
+- Listar, crear, editar y eliminar personas
+- Datos en Firebase Firestore (colección `personas`)
+- Producción: Angular → FastAPI (Cloud Function) → Firestore
+- Local: Angular → FastAPI (localhost) → Firestore
