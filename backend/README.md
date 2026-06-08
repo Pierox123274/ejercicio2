@@ -10,13 +10,13 @@ pinned: false
 
 # Ejercicio2 API
 
-Backend FastAPI para el CRUD de personas con Firebase Firestore.
+Backend FastAPI con Firebase Firestore.
 
-## Variables de entorno
+## Variables de entorno (Secrets en Hugging Face)
 
-| Variable | Descripción |
-|----------|-------------|
+| Variable | Valor |
+|----------|-------|
 | `FIREBASE_PROJECT_ID` | `ing-web-93d49` |
-| `FIREBASE_CREDENTIALS_JSON` | JSON de cuenta de servicio Firebase |
 | `PERSONAS_COLLECTION` | `personas` |
-| `CORS_ORIGINS` | `https://ing-web-93d49.web.app` |
+| `FIREBASE_CREDENTIALS_JSON` | Contenido completo del JSON de cuenta de servicio |
+| `CORS_ORIGINS` | `https://ing-web-93d49.web.app,https://ing-web-93d49.firebaseapp.com` |

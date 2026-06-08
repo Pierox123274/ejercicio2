@@ -17,7 +17,7 @@ CORS_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         "CORS_ORIGINS",
-        "http://localhost:4200,http://localhost:4201,https://ing-web-93d49.web.app,https://ing-web-93d49.firebaseapp.com",
+        "http://localhost:4200,http://localhost:4201,https://ing-web-93d49.web.app,https://ing-web-93d49.firebaseapp.com,https://pierox123274-ejercicio2-api.hf.space",
     ).split(",")
     if origin.strip()
 ]

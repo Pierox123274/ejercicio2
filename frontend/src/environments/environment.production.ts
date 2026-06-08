@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   useFirestore: false,
-  apiUrl: '/api',
+  apiUrl: 'https://pierox123274-ejercicio2-api.hf.space/api',
   firebaseConfig: {
     apiKey: 'AIzaSyBQ3PB6CFqS44LGxE0Zv7UoTAe1XEkNj2I',
     authDomain: 'ing-web-93d49.firebaseapp.com',

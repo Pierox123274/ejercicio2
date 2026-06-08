@@ -69,10 +69,10 @@ export class PersonaList implements OnInit {
           this.saving.set(false);
           this.loadPersonas();
         },
-        error: () => {
-          this.error.set('No se pudo actualizar la persona.');
-          this.saving.set(false);
-        },
+      error: (err) => {
+        this.error.set(this.resolveError(err, 'No se pudo actualizar la persona.'));
+        this.saving.set(false);
+      },
       });
       return;
     }
@@ -83,8 +83,8 @@ export class PersonaList implements OnInit {
         this.saving.set(false);
         this.loadPersonas();
       },
-      error: () => {
-        this.error.set('No se pudo guardar la persona.');
+      error: (err) => {
+        this.error.set(this.resolveError(err, 'No se pudo guardar la persona.'));
         this.saving.set(false);
       },
     });
@@ -125,11 +125,27 @@ export class PersonaList implements OnInit {
         this.deletingDoc.set(null);
         this.loadPersonas();
       },
-      error: () => {
-        this.error.set('No se pudo eliminar la persona.');
+      error: (err) => {
+        this.error.set(this.resolveError(err, 'No se pudo eliminar la persona.'));
         this.deletingDoc.set(null);
       },
     });
+  }
+
+  private resolveError(err: unknown, fallback: string): string {
+    if (err && typeof err === 'object') {
+      const error = err as { error?: { detail?: string }; message?: string; status?: number };
+      if (error.status === 409 || error.error?.detail?.includes('documento')) {
+        return 'Ya existe una persona con ese documento de identidad.';
+      }
+      if (error.error?.detail) {
+        return error.error.detail;
+      }
+      if (error.message?.includes('documento')) {
+        return error.message;
+      }
+    }
+    return fallback;
   }
 
   private resetForm(): void {
