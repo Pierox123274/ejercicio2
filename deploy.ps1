@@ -37,7 +37,7 @@ if ($Target -in @("render", "all")) {
 if ($Target -in @("firebase", "all")) {
     Write-Host "Construyendo frontend para produccion..." -ForegroundColor Cyan
     Set-Location $FrontendDir
-    npm run build
+    npm run build:hosting
     Set-Location $Root
     Write-Host "Desplegando en Firebase Hosting..." -ForegroundColor Cyan
     firebase deploy --only hosting --project ing-web-93d49
