@@ -30,4 +30,3 @@ services:
           type: web
           name: ejercicio2-api
           property: host
-        value: https://ejercicio2-api.onrender.com

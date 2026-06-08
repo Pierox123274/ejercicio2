@@ -8,10 +8,12 @@ import express from 'express';
 import { join } from 'node:path';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
-const API_BASE_URL = (process.env['API_BASE_URL'] || 'http://localhost:8001').replace(
-  /\/$/,
-  '',
-);
+const rawApiBaseUrl = process.env['API_BASE_URL'] || 'http://localhost:8001';
+const API_BASE_URL = (
+  rawApiBaseUrl.startsWith('http')
+    ? rawApiBaseUrl
+    : `https://${rawApiBaseUrl}`
+).replace(/\/$/, '');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
