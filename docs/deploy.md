@@ -1,56 +1,77 @@
-# Despliegue de Ejercicio2
+# Despliegue en Render (Web Service manual)
 
-## Opción recomendada: Render (backend + frontend)
+## Servicio 1: Backend (crear primero)
 
-### 1. Credenciales Firebase
+**New → Web Service**
 
-En [Firebase Console](https://console.firebase.google.com/project/ing-web-93d49/settings/serviceaccounts/adminsdk):
-- Genera una **nueva clave privada** (JSON)
-- Copia el contenido completo del archivo
+| Campo | Valor |
+|-------|-------|
+| Repository | `https://github.com/Pierox123274/ejercicio2` |
+| Name | `ejercicio2-api` |
+| Branch | `master` |
+| Root Directory | `backend` |
+| Runtime | Python 3 |
+| Build Command | `pip install -r requirements.txt` |
+| Start Command | `uvicorn main:app --host 0.0.0.0 --port $PORT` |
+| Health Check Path | `/api/health` |
+| Plan | Free |
 
-### 2. GitHub
+### Variables de entorno
 
-Sube el repositorio a GitHub.
+| Key | Value |
+|-----|-------|
+| `FIREBASE_PROJECT_ID` | `ing-web-93d49` |
+| `PERSONAS_COLLECTION` | `personas` |
+| `FIREBASE_CREDENTIALS_JSON` | JSON completo de Firebase (Cuentas de servicio) |
+| `PYTHON_VERSION` | `3.13.0` |
 
-### 3. Render Blueprint
-
-1. Entra a [Render Dashboard](https://dashboard.render.com/)
-2. **New** → **Blueprint**
-3. Conecta el repositorio de GitHub
-4. Render detectará `render.yaml`
-5. En el servicio **ejercicio2-api**, agrega la variable secreta:
-   - `FIREBASE_CREDENTIALS_JSON` = contenido completo del JSON
-
-### 4. URLs públicas
-
-| Servicio | URL |
-|----------|-----|
-| API | https://ejercicio2-api.onrender.com |
-| Web | https://ejercicio2-web.onrender.com |
-| Docs | https://ejercicio2-api.onrender.com/docs |
-
-### 5. Verificación
-
-```bash
-curl https://ejercicio2-api.onrender.com/api/health
-curl https://ejercicio2-api.onrender.com/api/personas
-```
-
-Abre https://ejercicio2-web.onrender.com y prueba crear, editar y eliminar personas.
+URL resultante: `https://ejercicio2-api.onrender.com`
 
 ---
 
-## Opción alternativa: Firebase Hosting (solo frontend)
+## Servicio 2: Frontend (crear después)
 
-Si el backend ya está en Render:
+**New → Web Service**
+
+| Campo | Valor |
+|-------|-------|
+| Repository | `https://github.com/Pierox123274/ejercicio2` |
+| Name | `ejercicio2-web` |
+| Branch | `master` |
+| Root Directory | `frontend` |
+| Runtime | Node |
+| Build Command | `npm ci && npm run build` |
+| Start Command | `npm run serve:ssr:frontend` |
+| Plan | Free |
+
+### Variable de entorno
+
+| Key | Value |
+|-----|-------|
+| `API_BASE_URL` | `ejercicio2-api.onrender.com` |
+
+URL resultante: `https://ejercicio2-web.onrender.com`
+
+---
+
+## Firebase Hosting (frontend alternativo)
 
 ```powershell
 cd frontend
-npm run build
+npm run build:hosting
 cd ..
-firebase deploy --only hosting
+firebase deploy --only hosting --project ing-web-93d49
 ```
 
-El frontend en Firebase usará `https://ejercicio2-api.onrender.com/api` (configurado en `environment.production.ts`).
-
 URL: https://ing-web-93d49.web.app
+
+Requiere que el backend en Render esté activo.
+
+---
+
+## Obtener FIREBASE_CREDENTIALS_JSON
+
+1. [Firebase Console → Cuentas de servicio](https://console.firebase.google.com/project/ing-web-93d49/settings/serviceaccounts/adminsdk)
+2. **Generar nueva clave privada**
+3. Abrir el `.json` con bloc de notas
+4. Copiar todo el contenido y pegarlo en Render
