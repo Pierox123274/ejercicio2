@@ -10,7 +10,7 @@ app = FastAPI(title="Ejercicio2 API")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
-    allow_origin_regex=r"https://.*\.onrender\.com$",
+    allow_origin_regex=r"https://(.*\.onrender\.com|.*\.web\.app|.*\.firebaseapp\.com)$",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

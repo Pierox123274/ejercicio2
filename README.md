@@ -2,96 +2,64 @@
 
 Aplicación CRUD de personas con frontend en Angular, backend en FastAPI y base de datos en **Firebase Firestore** (`ing-web-93d49`).
 
-## Inicio rápido
+## URLs en producción
+
+| Servicio | URL | Estado |
+|----------|-----|--------|
+| **Frontend (Firebase)** | https://ing-web-93d49.web.app | Desplegado |
+| **Backend (Render)** | https://ejercicio2-api.onrender.com | Requiere configurar Blueprint |
+| **Frontend (Render)** | https://ejercicio2-web.onrender.com | Requiere configurar Blueprint |
+| **Repositorio** | https://github.com/Pierox123274/ejercicio2 | Publicado |
+
+## Desplegar el backend (paso final)
+
+El frontend ya está publicado. Para que la app funcione al 100%, despliega el backend en Render:
+
+1. Descarga la clave privada de Firebase:
+   [Cuentas de servicio](https://console.firebase.google.com/project/ing-web-93d49/settings/serviceaccounts/adminsdk) → **Generar nueva clave privada**
+
+2. Despliega con Render Blueprint:
+
+   [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/Pierox123274/ejercicio2)
+
+3. En el servicio **ejercicio2-api**, agrega la variable secreta:
+   - `FIREBASE_CREDENTIALS_JSON` = contenido completo del archivo JSON
+
+4. Espera el deploy y verifica:
+   ```bash
+   curl https://ejercicio2-api.onrender.com/api/health
+   ```
+
+5. Abre https://ing-web-93d49.web.app y prueba la aplicación.
+
+## Desarrollo local
 
 ```powershell
 cd d:\WEB\ejercicio2
 .\start.ps1
 ```
 
-Abre **http://localhost:4201**
-
-| Servicio  | URL |
-|-----------|-----|
-| Frontend  | http://localhost:4201 |
-| Backend   | http://localhost:8001 |
-| API Docs  | http://localhost:8001/docs |
-
-> Usa puertos 4201 y 8001 para no chocar con Ejercicio1 (4200/8000).
-
-## Firebase
-
-- **Proyecto:** `ing-web-93d49`
-- **Base de datos:** Firestore `(default)`
-- **Colección:** `personas`
-
-### Autenticación automática
-
-El backend se conecta automáticamente usando tu sesión de **Firebase CLI** (`firebase login`).
-
-Opcionalmente puedes usar una cuenta de servicio:
-1. Firebase Console → Cuentas de servicio → Generar nueva clave privada
-2. Guardar como `backend/firebase-service-account.json`
-
-Verificar conexión:
-
-```powershell
-.\setup-firebase.ps1
-```
+- Frontend: http://localhost:4201
+- Backend: http://localhost:8001
 
 ## Estructura
 
 ```
 ejercicio2/
-├── backend/          # API FastAPI + Firestore
+├── backend/          # FastAPI + Firestore
 ├── frontend/         # Angular 21 + Bootstrap
-├── start.ps1         # Inicia backend y frontend
-└── setup-firebase.ps1
+├── render.yaml       # Blueprint Render
+├── firebase.json     # Firebase Hosting
+└── docs/deploy.md    # Guía detallada
 ```
 
-## Manual
-
-### Backend
-
-```powershell
-cd backend
-.\.venv\Scripts\Activate.ps1
-uvicorn main:app --reload --port 8001
-```
-
-### Frontend
-
-```powershell
-cd frontend
-npm start -- --port 4201
-```
-
-### Datos de ejemplo
-
-```powershell
-cd backend
-.\.venv\Scripts\python scripts\seed.py
-```
-
-## Endpoints
+## Endpoints API
 
 | Método | Ruta | Descripción |
 |--------|------|-------------|
-| GET | `/api/health` | Estado de conexión con Firebase |
+| GET | `/api/health` | Estado de Firebase |
 | GET | `/api/personas` | Listar personas |
-| GET | `/api/personas/{doc}` | Obtener persona por documento |
+| GET | `/api/personas/{doc}` | Obtener persona |
 | POST | `/api/personas` | Crear persona |
 | PUT | `/api/personas/{doc}` | Editar persona |
 | DELETE | `/api/personas/{doc}` | Eliminar persona |
-
-## Colección Firestore
-
-Cada documento usa `docIdentidad` como ID:
-
-```json
-{
-  "nombre": "Juan Pérez",
-  "edad": 30,
-  "correo": "juan@ejemplo.com"
-}
-```
