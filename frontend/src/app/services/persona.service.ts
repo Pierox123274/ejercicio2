@@ -4,29 +4,41 @@ import { Observable } from 'rxjs';
 
 import { environment } from '../../environments/environment';
 import { Persona, PersonaCreate, PersonaUpdate } from '../models';
+import { PersonaFirestoreService } from './persona-firestore.service';
 
 @Injectable({ providedIn: 'root' })
 export class PersonaService {
   private readonly http = inject(HttpClient);
+  private readonly firestore = inject(PersonaFirestoreService);
   private readonly baseUrl = `${environment.apiUrl}/personas`;
 
   list(): Observable<Persona[]> {
-    return this.http.get<Persona[]>(this.baseUrl);
+    return environment.useFirestore
+      ? this.firestore.list()
+      : this.http.get<Persona[]>(this.baseUrl);
   }
 
   get(docIdentidad: string): Observable<Persona> {
-    return this.http.get<Persona>(`${this.baseUrl}/${docIdentidad}`);
+    return environment.useFirestore
+      ? this.firestore.get(docIdentidad)
+      : this.http.get<Persona>(`${this.baseUrl}/${docIdentidad}`);
   }
 
   create(persona: PersonaCreate): Observable<Persona> {
-    return this.http.post<Persona>(this.baseUrl, persona);
+    return environment.useFirestore
+      ? this.firestore.create(persona)
+      : this.http.post<Persona>(this.baseUrl, persona);
   }
 
   update(docIdentidad: string, persona: PersonaUpdate): Observable<Persona> {
-    return this.http.put<Persona>(`${this.baseUrl}/${docIdentidad}`, persona);
+    return environment.useFirestore
+      ? this.firestore.update(docIdentidad, persona)
+      : this.http.put<Persona>(`${this.baseUrl}/${docIdentidad}`, persona);
   }
 
   delete(docIdentidad: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${docIdentidad}`);
+    return environment.useFirestore
+      ? this.firestore.delete(docIdentidad)
+      : this.http.delete<void>(`${this.baseUrl}/${docIdentidad}`);
   }
 }
